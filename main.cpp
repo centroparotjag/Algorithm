@@ -17,7 +17,7 @@ void bubble_sort_2_dim_arr(int* arr, int len) {
 }
 
 
-void printArray(char Free_text [], int* array, const int row, const int col) {
+void printArray(char* Free_text, int* array, const int row, const int col) {
        std::cout << Free_text << "\t";
 
        for (int i = 0; i < row; ++i) {
@@ -34,13 +34,14 @@ void printArray(char Free_text [], int* array, const int row, const int col) {
 }
 
 // 3. ----------------------------------------------------
+// https://en.wikipedia.org/wiki/TPK_algorithm
+
 double f(double t)
 {
     return sqrt(fabs(t)) + 5 * pow(t, 3);
 }
 
 
-// https://en.wikipedia.org/wiki/TPK_algorithm
 void TPK_algorithm (void){
 
     double a[11] = {0}, y;
