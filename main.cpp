@@ -18,7 +18,7 @@ void bubble_sort_2_dim_arr(int* arr, int len) {
 
 
 void printArray(char* Free_text, int* array, const int row, const int col) {
-       std::cout << Free_text << "\t";
+       std::cout << Free_text;
 
        for (int i = 0; i < row; ++i) {
             for (int j = 0; j < col; ++j) {
@@ -34,8 +34,6 @@ void printArray(char* Free_text, int* array, const int row, const int col) {
 }
 
 // 3. ----------------------------------------------------
-// https://en.wikipedia.org/wiki/TPK_algorithm
-
 double f(double t)
 {
     return sqrt(fabs(t)) + 5 * pow(t, 3);
@@ -70,16 +68,16 @@ int main(int argc, char *argv[])
 {
     QCoreApplication q(argc, argv);
 
-//  1.  Реализовать пузырьковую сортировку двумерного массива например,
-//      массив 1,9,2 5,7,6 4,3,8 должен на выходе стать 1,2,3 4,5,6 7,8,9
+//  1.  Реализовать пузырьковую сортировку двумерного массива
+//      например, массив 1,9,2 5,7,6 4,3,8 должен на выходе стать 1,2,3 4,5,6 7,8,9
 
     int arr [3][3]= { {1,9,2}, {5,7,6}, {4,3,8} };
 
-    printArray((char*) "Before sorting:", *arr, 3, 3);
+    printArray((char*)"Before sorting:\t", *arr, 3, 3);
 
     bubble_sort_2_dim_arr (*arr, 9);
 
-    printArray((char*) "After sorting:", *arr, 3, 3);
+    printArray((char*)"After sorting:\t", *arr, 3, 3);
     printf("\n");
 
 
