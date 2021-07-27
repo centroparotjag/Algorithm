@@ -1,65 +1,101 @@
 #include <QCoreApplication>
-#include <iostream>
+//#include <iostream>
 #include <stdio.h>
 #include <math.h>
 
+void swapInt(int *a, int *b) {
+    int t = *a;
+    *a = *b;
+    *b = t;
+}
+
+void printIntArray(int* array, int size, int offset) {
+    char format[7];
+    sprintf(format, "%%%dd", offset);
+    for (int i = 0; i < size; ++i) {
+        printf(format, array[i]);
+        if (i != size - 1)
+            printf(",");
+    }
+    printf("\n");
+}
+
+void fillIntRandom(int* array, int size, int border) {
+    for (int i = 0; i < size; ++i)
+        *(array + i) = rand() % border;
+}
+
+
+
+
 // 1. ----------------------------------------------------
-void bubble_sort_2_dim_arr(int* arr, int len) {
-    for (int i = 0; i < len; ++i) {
-        for (int j = 0; j < len - 1; ++j) {
-            if (arr[j] > arr[j + 1]) {  // swap
-                int t =  arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = t;
-            }
-        }
-    }
+
+void mediana_and_replace(int* array, int size){
+
+    if (array[0] > array[size / 2])
+        swapInt(&array[0] , &array[size / 2]);
+
+    if (array[size / 2] > array[size])
+        swapInt(&array[size / 2] , &array[size]);
+
+    if (array[0] > array[size / 2])
+        swapInt(&array[0] , &array[size / 2]);
+
+    //printf("mediana - %3d, %3d, %3d\n", array[0], array[size / 2], array[size]);
 }
 
 
-void printArray(char* Free_text, int* array, const int row, const int col) {
-       std::cout << Free_text;
+void qs (int* arr, int first, int last) {
+    int i = first;
+    int j = last;
 
-       for (int i = 0; i < row; ++i) {
-            for (int j = 0; j < col; ++j) {
+    int x = arr[(first + last) / 2];
 
-                printf("%2d", array[j + (i * row)]);
-                if (j < 2)
-                    printf(",");
-            }
-            printf("\t");
+    do {
+        while (arr[i] < x) i++;
+        while (arr[j] > x) j--;
+
+        if (i <= j) {
+            swapInt(&arr[i], &arr[j]);
+            i++;
+            j--;
         }
+    } while (i <= j);
 
-        printf("\n");
+    if (i < last) qs(arr, i, last);
+    if (first < j) qs(arr, first, j);
 }
 
-// 3. ----------------------------------------------------
-double f(double t)
+
+
+void InsertionSort(int* array, int size)
 {
-    return sqrt(fabs(t)) + 5 * pow(t, 3);
-}
+    int newElement, location;
 
-
-void TPK_algorithm (void){
-
-    double a[11] = {0}, y;
-
-    printf("Введите 11 чисел\n");
-    for (int i = 0; i < 11; i++){
-        scanf("%lf", &a[i]);
-    }
-
-
-    for (int i = 10; i >= 0; i--) {
-        y = f(a[i]);
-        if (y > 400)
-            printf("%d TOO LARGE\n", i);
-        else
-            printf("%d %.16g\n", i, y);
+    for (int i = 1; i < size; i++)
+    {
+        newElement = array[i];
+        location = i - 1;
+        while(location >= 0 && array[location] > newElement)
+        {
+            array[location+1] = array[location];
+            location = location - 1;
+        }
+        array[location+1] = newElement;
     }
 }
 
 
+void ImprovedSort (int* arr, int size){
+
+    if (size <= 10){
+        InsertionSort(arr, size);
+    }
+    else{
+        mediana_and_replace(arr, size-1);
+        qs(arr, 0, size - 1);
+    }
+}
 
 
 
@@ -68,23 +104,23 @@ int main(int argc, char *argv[])
 {
     QCoreApplication q(argc, argv);
 
-//  1.  Реализовать пузырьковую сортировку двумерного массива
-//      например, массив 1,9,2 5,7,6 4,3,8 должен на выходе стать 1,2,3 4,5,6 7,8,9
 
-    int arr [3][3]= { {1,9,2}, {5,7,6}, {4,3,8} };
+//  1.  Описать в коде улучшенный алгоритм быстрой сортировки
+    printf("Improved Sort:\n");
 
-    printArray((char*)"Before sorting:\t", *arr, 3, 3);
+    const int SZ = 30;
+    int arr[SZ];
+    fillIntRandom(arr, SZ, 100);
+    printIntArray(arr, SZ, 3);
 
-    bubble_sort_2_dim_arr (*arr, 9);
+    ImprovedSort (arr, SZ);
 
-    printArray((char*)"After sorting:\t", *arr, 3, 3);
+    printIntArray(arr, SZ, 3);
     printf("\n");
 
 
-//  3.  Реализовать алгоритм Трабба-Прадо-Кнута в коде на языке С
-    TPK_algorithm ();
 
-    printf("\n");
+
     return 0;
 }
 
