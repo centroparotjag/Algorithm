@@ -124,6 +124,65 @@ void prQueueTest() {
 
 
 
+// 2. ============================================
+void dec_to_bin_recursively (int number){
+    if (number > 0){
+        dec_to_bin_recursively(number / 2);
+        printf("%d", number % 2);
+    }
+    else {
+        printf("%d", 0);
+    }
+}
+
+#define T char
+#define SIZE 1000
+#define true 1 == 1
+#define false 1 != 1
+
+typedef int boolean;
+int cursor = -1;
+T Stack[SIZE];
+
+boolean pushStack(T data) {
+    if (cursor < SIZE) {
+        Stack[++cursor] = data;
+        return true;
+    } else {
+        printf("%s \n", "Stack overflow");
+        return false;
+    }
+}
+
+T popStack() {
+    if (cursor != -1) {
+        return Stack[cursor--];
+    } else {
+        printf("%s \n", "Stack is empty");
+        return -1;
+    }
+}
+
+void arrstackTest() {
+    printf("\n");
+    int size = 32;
+
+    for (int i = 0; i < size; ++i) {
+        pushStack(i);
+    }
+
+
+    for (int i = 0; i < size; ++i) {
+        printf("dec = %d to bin = 0b", cursor);
+        dec_to_bin_recursively (popStack());
+        printf("\n");
+    }
+
+    popStack();
+}
+
+
+
 
 
 //======================================================================================================
@@ -137,7 +196,7 @@ int main(int argc, char *argv[])
 
 
     //    2. Реализовать перевод из десятичной в двоичную систему счисления с использованием стека.
-
+    arrstackTest();
 
 
     return 0;
