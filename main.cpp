@@ -1,101 +1,128 @@
 #include <QCoreApplication>
-//#include <iostream>
 #include <stdio.h>
-#include <math.h>
 
-void swapInt(int *a, int *b) {
-    int t = *a;
-    *a = *b;
-    *b = t;
-}
 
-void printIntArray(int* array, int size, int offset) {
-    char format[7];
-    sprintf(format, "%%%dd", offset);
-    for (int i = 0; i < size; ++i) {
-        printf(format, array[i]);
-        if (i != size - 1)
-            printf(",");
+// 1. ==================================================
+#define SZ 10
+
+typedef struct {
+    int pr;
+    int dat;
+} Node;
+
+Node* arr[SZ];
+int head;
+int tail;
+int items;
+
+void initQueue() {
+    for (int i = 0; i < SZ; ++i) {
+        arr[i] = NULL;
     }
-    printf("\n");
+    head = 0;
+    tail = 0;
+    items = 0;
 }
 
-void fillIntRandom(int* array, int size, int border) {
-    for (int i = 0; i < size; ++i)
-        *(array + i) = rand() % border;
+void ins(int pr, int dat) {
+    Node *node = (Node*) malloc(sizeof(Node));
+    node->dat = dat;
+    node->pr = pr;
+
+    if (items == SZ) {
+        printf("%s \n", "Queue is full");
+        return;
+    }
+
+    arr[tail++] = node;
+    items++;
 }
 
+Node* rem() {
+    int i = 0;
+    int idx = 0;
+    Node *tmp;
 
 
+    if (items == 0)
+        return NULL;
 
-// 1. ----------------------------------------------------
+    int flag = idx % SZ;
+    int pr = arr[idx]->pr;
 
-void mediana_and_replace(int* array, int size){
+    //------ search for nearest highest priority -------
+    for (idx = 0; idx < tail; ++idx) {
+        if (arr[idx]->pr < pr){
+            pr = arr[idx]->pr;
+            flag = idx % SZ;
+        }
+    }
 
-    if (array[0] > array[size / 2])
-        swapInt(&array[0] , &array[size / 2]);
+    tmp = arr[flag];
+    arr[flag] = NULL;
+    i  = flag;
+    items--;
+    tail--;
 
-    if (array[size / 2] > array[size])
-        swapInt(&array[size / 2] , &array[size]);
-
-    if (array[0] > array[size / 2])
-        swapInt(&array[0] , &array[size / 2]);
-
-    //printf("mediana - %3d, %3d, %3d\n", array[0], array[size / 2], array[size]);
-}
-
-
-void qs (int* arr, int first, int last) {
-    int i = first;
-    int j = last;
-
-    int x = arr[(first + last) / 2];
-
-    do {
-        while (arr[i] < x) i++;
-        while (arr[j] > x) j--;
-
-        if (i <= j) {
-            swapInt(&arr[i], &arr[j]);
+    //----- shift of the tail to the head -------------
+    while (i < tail) {             // shift << 1
+            idx = i % SZ;
+            arr[idx] = arr[idx+1];
             i++;
-            j--;
-        }
-    } while (i <= j);
+    }
 
-    if (i < last) qs(arr, i, last);
-    if (first < j) qs(arr, first, j);
+    //----- removing the last in the tail -------------
+    arr[i] = NULL;
+
+    return tmp;
+}
+
+void printQueue() {
+    printf("[ ");
+    for (int i = 0; i < SZ; ++i) {
+        if (arr[i] == NULL)
+            printf("[*, *] ");
+        else
+            printf("[%d, %d] ", arr[i]->pr, arr[i]->dat);
+    }
+    printf(" ]\n");
+
+    //printf("items-%d head-%d tail-%d\n", items, head, tail); // debug
+}
+
+void prQueueTest() {
+    initQueue();
+    ins(1, 11);
+    ins(3, 22);
+    ins(4, 33);
+    ins(2, 44);
+    ins(3, 55);
+    ins(4, 66);
+    ins(5, 77);
+    ins(1, 88);
+    ins(2, 99);
+    ins(6, 100);
+    printQueue();
+
+    for (int i = 0; i < 7; ++i) {
+        Node* n = rem();
+        printf("pr=%d, dat=%d \n", n->pr, n->dat);
+    }
+    printQueue();
+
+    ins(1, 110);
+    ins(3, 120);
+    ins(6, 130);
+    printQueue();
+
+    for (int i = 0; i < 5; ++i) {
+        Node* n = rem();
+        printf("pr=%d, dat=%d \n", n->pr, n->dat);
+    }
+    printQueue();
 }
 
 
-
-void InsertionSort(int* array, int size)
-{
-    int newElement, location;
-
-    for (int i = 1; i < size; i++)
-    {
-        newElement = array[i];
-        location = i - 1;
-        while(location >= 0 && array[location] > newElement)
-        {
-            array[location+1] = array[location];
-            location = location - 1;
-        }
-        array[location+1] = newElement;
-    }
-}
-
-
-void ImprovedSort (int* arr, int size){
-
-    if (size <= 10){
-        InsertionSort(arr, size);
-    }
-    else{
-        mediana_and_replace(arr, size-1);
-        qs(arr, 0, size - 1);
-    }
-}
 
 
 
@@ -105,19 +132,11 @@ int main(int argc, char *argv[])
     QCoreApplication q(argc, argv);
 
 
-//  1.  Описать в коде улучшенный алгоритм быстрой сортировки
-    printf("Improved Sort:\n");
+    //    1. Описать очередь с приоритетным исключением
+    prQueueTest();
 
-    const int SZ = 30;
-    int arr[SZ];
-    fillIntRandom(arr, SZ, 100);
-    printIntArray(arr, SZ, 3);
 
-    ImprovedSort (arr, SZ);
-
-    printIntArray(arr, SZ, 3);
-    printf("\n");
-
+    //    2. Реализовать перевод из десятичной в двоичную систему счисления с использованием стека.
 
 
 
