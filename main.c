@@ -67,7 +67,6 @@ int main(int argc, char *argv[])
     printf(validation (sequence) ? "The sequence is correct\n" : "The sequence is not correct\n" );
 
 
-
     //    2. Создать функцию, копирующую односвязный список (без удаления первого списка).
 
 
