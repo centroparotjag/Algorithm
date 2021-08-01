@@ -31,8 +31,6 @@ int validation (char* sequence){
         i++;
     }
 
-    printTwoLinkIntList(lst);
-
     if (num_parenthes == 0 || num_parenthes % 2 != 0){
         return wrong;       // 0
     }
@@ -51,8 +49,6 @@ int validation (char* sequence){
         }
     }
 
-    printTwoLinkIntList(lst);
-
     return right;               // 1
 }
 
@@ -68,7 +64,7 @@ int main(int argc, char *argv[])
     //       Например: (2+(2*2)) или [2/{5*(4+7)}]
 
     char sequence[] = "[2/{5*(4+7)}]";
-    printf("Sequece is - %d \n", validation (sequence));
+    printf(validation (sequence) ? "The sequence is correct\n" : "The sequence is not correct\n" );
 
 
 
