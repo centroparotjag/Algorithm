@@ -1,6 +1,8 @@
 //#include <QCoreApplication>
 #include <stdio.h>
 #include "twoLinkList.h"
+#include "OneLinkList.h"
+
 
 
 // 1. -----------------------------------------------------------
@@ -53,6 +55,47 @@ int validation (char* sequence){
 }
 
 
+// 2.--------------------------------------------------------------------------------------------------
+
+int getDataOne(OneLinkNode *n) {
+    return n->dat;
+}
+
+void OneListCPY (void){
+    int sizeList = 10;
+
+    //--------- Init list --------
+    OneLinkList *lst1 = (OneLinkList*) malloc(sizeof(OneLinkList));
+    initOneLinkList(lst1);
+    //--------- Init list 2 ------
+    OneLinkList *lst2 = (OneLinkList*) malloc(sizeof(OneLinkList));
+    initOneLinkList(lst2);
+
+    //---- filling out the list ---
+    for (int i = 0; i < sizeList; ++i) {
+        insert(lst1, i*7);
+
+    }
+
+    printf("List 1 - ");
+    printOneLinkIntList(lst1);
+
+    OneLinkNode *list1 = lst1->head;
+
+    //---- copy list to list 2 ---
+    for (int i = 0; i < sizeList; ++i) {
+        insert(lst2, getDataOne(list1+i*2));   //n->dat;
+
+    }
+
+    printf("List 2 - ");
+    printOneLinkIntList(lst2);
+
+    printf("List 1 after copy - ");
+    printOneLinkIntList(lst1);
+
+}
+
 
 
 //======================================================================================================
@@ -68,6 +111,9 @@ int main(int argc, char *argv[])
 
 
     //    2. Создать функцию, копирующую односвязный список (без удаления первого списка).
+
+    OneListCPY ();
+
 
 
 
